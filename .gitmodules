@@ -1,6 +1,6 @@
 [submodule "extensions/tson-vscode"]
 	path = extensions/tson-vscode
 	url = https://github.com/Mehmetyaz/tson-vscode.git
-[submodule "extensions/tson-js"]
-	path = extensions/tson-js
+[submodule "packages/tson-js"]
+	path = packages/tson-js
 	url = https://github.com/Mehmetyaz/tson-js.git
