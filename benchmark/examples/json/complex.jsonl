@@ -1,0 +1,13 @@
+{"type": "product_catalog", "payload": {"catalogId": "cat001", "name": "Summer Products 2023", "publishedAt": "2023-05-01T00:00:00Z", "categories": ["outdoor", "sports", "summer", "beachwear"]}}
+{"type": "product", "payload": {"id": "prod001", "catalogId": "cat001", "sku": "BW-001", "inStock": true, "attributes": {"color": "blue", "size": "M", "material": "cotton", "washable": true}}}
+{"type": "product_name", "payload": {"productId": "prod001", "language": "en", "name": "Men's Beach Shorts"}}
+{"type": "product_name", "payload": {"productId": "prod001", "language": "es", "name": "Pantalones cortos de playa para hombres"}}
+{"type": "product_description", "payload": {"productId": "prod001", "language": "en", "description": "Comfortable beach shorts perfect for summer activities. Quick-drying fabric with UV protection."}}
+{"type": "product_price", "payload": {"productId": "prod001", "currencyCode": "USD", "amount": 29.99, "isDiscounted": true, "originalAmount": 39.99}}
+{"type": "product_image", "payload": {"productId": "prod001", "url": "https://example.com/images/bw001_front.jpg", "type": "front", "width": 800, "height": 1200}}
+{"type": "product_image", "payload": {"productId": "prod001", "url": "https://example.com/images/bw001_back.jpg", "type": "back", "width": 800, "height": 1200}}
+{"type": "product_review", "payload": {"productId": "prod001", "userId": "u2001", "rating": 4.5, "reviewDate": "2023-06-15T09:20:00Z", "verified": true}}
+{"type": "review_text", "payload": {"productId": "prod001", "reviewId": "r3001", "language": "en", "title": "Great quality shorts", "content": "Really comfortable and perfect fit. Material feels premium and they dry quickly after swimming."}}
+{"type": "product_recommendation", "payload": {"productId": "prod001", "recommendedProducts": ["prod002", "prod005", "prod008"], "recommendationType": "frequently_bought_together"}}
+{"type": "product_availability", "payload": {"productId": "prod001", "storeId": "store001", "quantity": 45, "locationName": "Main Warehouse", "lastUpdated": "2023-06-20T14:30:00Z"}}
+{"type": "product_availability", "payload": {"productId": "prod001", "storeId": "store002", "quantity": 12, "locationName": "Downtown Store", "lastUpdated": "2023-06-20T15:45:00Z"}} 

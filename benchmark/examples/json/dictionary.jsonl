@@ -1,0 +1,7 @@
+{"type": "metadata", "payload": {"term": "Artificial Intelligence", "language": "en", "part_of_speech": "noun"}}
+{"type": "text_definition", "payload": {"content": "A branch of computer science dealing with the simulation of intelligent behavior in computers."}}
+{"type": "text_definition", "payload": {"content": "The capability of a machine to imitate intelligent human behavior."}}
+{"type": "image", "payload": {"url": "https://example.com/ai_image.jpg", "caption": "Visual representation of AI concept"}}
+{"type": "text_example", "payload": {"content": "AI systems are typically categorized as either 'narrow AI' (designed for specific tasks) or 'general AI' (capable of performing any intellectual task)."}}
+{"type": "audio", "payload": {"url": "https://example.com/ai_pronunciation.mp3", "duration": 2.5, "transcript": "Artificial Intelligence"}}
+{"type": "text_history", "payload": {"content": "First coined as a term in 1956 by John McCarthy at the Dartmouth Conference."}} 
