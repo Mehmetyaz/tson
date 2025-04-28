@@ -1,8 +1,0 @@
-{"type": "catalog_info", "payload": {"catalogId": "SUMMER2023", "name": "Summer Collection 2023", "saleEndDate": "2023-08-31T23:59:59Z"}}
-{"type": "product", "payload": {"id": "p1001", "name": "Wireless Headphones", "price": 149.99, "category": "electronics", "inStock": true, "discount": 15, "color": "black", "description": "High-quality wireless headphones with noise cancellation."}}
-{"type": "product", "payload": {"id": "p1002", "name": "Smart Watch", "price": 299.99, "category": "electronics", "inStock": true, "discount": null, "color": "silver", "description": "Water-resistant smartwatch with heart rate monitoring."}}
-{"type": "product", "payload": {"id": "p1003", "name": "Bluetooth Speaker", "price": 79.99, "category": "electronics", "inStock": false, "discount": 10, "color": "blue", "description": null}}
-{"type": "product", "payload": {"id": "p1004", "name": "Laptop Backpack", "price": 59.99, "category": "accessories", "inStock": true, "discount": 20, "color": "gray", "description": "Durable backpack with laptop compartment and multiple pockets."}}
-{"type": "product", "payload": {"id": "p1005", "name": "USB-C Cable Pack", "price": 19.99, "category": "accessories", "inStock": true, "discount": 0, "color": undefined, "description": "Pack of 3 durable USB-C cables."}}
-{"type": "featured_products", "payload": ["p1001", "p1002"]}
-{"type": "metadata", "payload": {"created": "2023-05-01T00:00:00Z", "createdBy": "admin", "lastUpdated": "2023-06-15T10:30:00Z", "region": null}} 

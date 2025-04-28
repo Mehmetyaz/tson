@@ -1,0 +1,89 @@
+---
+user:
+  id: u1001
+  username: johndoe
+  fullName: John Doe
+  registeredAt: '2023-05-15T10:30:00Z'
+---
+contact:
+  userId: u1001
+  email: john.doe@example.com
+  isPrimary: true
+---
+contact:
+  userId: u1001
+  phone: +1-555-123-4567
+  isPrimary: false
+---
+address:
+  userId: u1001
+  type: shipping
+  street: 123 Main St
+  city: San Francisco
+  state: CA
+  zipCode: '94105'
+  country: USA
+---
+address:
+  userId: u1001
+  type: billing
+  street: 123 Main St
+  city: San Francisco
+  state: CA
+  zipCode: '94105'
+  country: USA
+---
+order:
+  id: o2001
+  userId: u1001
+  orderDate: '2023-06-10T15:45:00Z'
+  status: delivered
+  total: 234.56
+---
+order_item:
+  orderId: o2001
+  productId: p3001
+  name: Wireless Headphones
+  quantity: 1
+  price: 199.99
+---
+order_item:
+  orderId: o2001
+  productId: p3002
+  name: Phone Case
+  quantity: 2
+  price: 17.99
+---
+user:
+  id: u1002
+  username: janesmith
+  fullName: Jane Smith
+  registeredAt: '2023-04-20T14:15:00Z'
+---
+contact:
+  userId: u1002
+  email: jane.smith@example.com
+  isPrimary: true
+---
+address:
+  userId: u1002
+  type: shipping
+  street: 456 Oak Avenue
+  city: Los Angeles
+  state: CA
+  zipCode: '90001'
+  country: USA
+---
+order:
+  id: o2002
+  userId: u1002
+  orderDate: '2023-06-12T09:30:00Z'
+  status: shipped
+  total: 59.95
+---
+order_item:
+  orderId: o2002
+  productId: p3003
+  name: Bluetooth Speaker
+  quantity: 1
+  price: 59.95
