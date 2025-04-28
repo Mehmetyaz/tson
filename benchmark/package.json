@@ -7,13 +7,15 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "benchmark": "node token-benchmark.js"
+    "bench-token": "node token-benchmark.js",
+    "bench-perf": "node performance-benchmark.js"
   },
   "dependencies": {
-    "openai": "^4.20.0",
-    "fs": "0.0.1-security",
-    "path": "^0.12.7",
     "cli-table3": "^0.6.3",
+    "fs": "0.0.1-security",
+    "js-yaml": "^4.1.0",
+    "openai": "^4.20.0",
+    "path": "^0.12.7",
     "tiktoken": "^1.0.7"
   },
   "author": "",

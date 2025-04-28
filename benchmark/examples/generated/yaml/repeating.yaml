@@ -1,0 +1,66 @@
+---
+log_session:
+  sessionId: sess12345
+  startTime: '2023-06-01T08:00:00Z'
+  userId: user789
+  deviceType: mobile
+---
+log_event:
+  sessionId: sess12345
+  timestamp: '2023-06-01T08:00:05Z'
+  eventType: page_view
+  path: /home
+---
+log_event:
+  sessionId: sess12345
+  timestamp: '2023-06-01T08:00:30Z'
+  eventType: button_click
+  elementId: search_btn
+---
+log_event:
+  sessionId: sess12345
+  timestamp: '2023-06-01T08:00:45Z'
+  eventType: search
+  query: summer shoes
+---
+log_event:
+  sessionId: sess12345
+  timestamp: '2023-06-01T08:01:10Z'
+  eventType: page_view
+  path: /search/results
+---
+log_event:
+  sessionId: sess12345
+  timestamp: '2023-06-01T08:01:45Z'
+  eventType: product_view
+  productId: prod123
+---
+log_event:
+  sessionId: sess12345
+  timestamp: '2023-06-01T08:02:20Z'
+  eventType: add_to_cart
+  productId: prod123
+  quantity: 1
+---
+log_event:
+  sessionId: sess12345
+  timestamp: '2023-06-01T08:03:05Z'
+  eventType: page_view
+  path: /cart
+---
+log_event:
+  sessionId: sess12345
+  timestamp: '2023-06-01T08:04:30Z'
+  eventType: checkout_start
+---
+log_event:
+  sessionId: sess12345
+  timestamp: '2023-06-01T08:06:15Z'
+  eventType: checkout_complete
+  orderTotal: 59.99
+  paymentMethod: credit_card
+---
+log_session_end:
+  sessionId: sess12345
+  endTime: '2023-06-01T08:07:00Z'
+  duration: 420
