@@ -4,3 +4,6 @@
 [submodule "packages/tson-js"]
 	path = packages/tson-js
 	url = https://github.com/Mehmetyaz/tson-js.git
+[submodule "packages/tson-dart"]
+	path = packages/tson-dart
+	url = https://github.com/Mehmetyaz/tson-dart.git
