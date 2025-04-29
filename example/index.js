@@ -1,4 +1,4 @@
-const { stringify, parse } = require("tson-js");
+const { stringify, parse } = require("tson-js").TSON;
 
 const obj = {
   name: "John",
@@ -142,3 +142,15 @@ for (const jsonObject of jsonObjects) {
     console.log(parsed);
   }
 }
+
+const ts = `
+
+
+observations(general(add["User skipped basic questions ('What is your name?', 'Tell us about yourself').", "User skipped a pronunciation task ('Please repeat after me...').", "User seems hesitant to interact or provide input."]))
+
+
+
+`;
+
+const parsed = parse(ts);
+console.log(JSON.stringify(parsed, null, 2));
