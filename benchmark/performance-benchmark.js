@@ -1,12 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const Table = require("cli-table3");
-const {
-  parse,
-  stringify,
-  tsonToJSON,
-  jsonToTSON,
-} = require("../packages/tson-js");
+const { TSON } = require("../packages/tson-js");
 
 // Native JSON methods for comparison
 const nativeJSON = {
@@ -14,23 +9,27 @@ const nativeJSON = {
   stringify: JSON.stringify,
 };
 
-// File paths
-const jsonDir = path.join(__dirname, "examples", "json");
-const tsonDir = path.join(__dirname, "examples", "tson");
+const examplesDir = path.join(__dirname, "examples");
 
 // Number of iterations for each test to get reliable results
-const ITERATIONS = 1000000; // 1 M iterations
+const ITERATIONS = 100; // 1 M iterations
 
 // Get list of examples
 const getExamples = () => {
   const jsonFiles = fs
-    .readdirSync(jsonDir)
+    .readdirSync(examplesDir)
     .filter((file) => file.endsWith(".jsonl"));
-  return jsonFiles.map((file) => ({
-    name: path.basename(file, ".jsonl"),
-    jsonPath: path.join(jsonDir, file),
-    tsonPath: path.join(tsonDir, file.replace(".jsonl", ".tsonl")),
-  }));
+  return jsonFiles.map((file) => {
+    const jsonFile = fs.readFileSync(path.join(examplesDir, file), "utf8");
+    const objects = jsonFile.split("\n").map((line) => JSON.parse(line));
+
+    return {
+      name: path.basename(file, ".jsonl"),
+      json: jsonFile,
+      tson: objects.map((obj) => TSON.stringify(obj, false)).join("\n"),
+      objects: objects,
+    };
+  });
 };
 
 // Time execution of a function
@@ -78,12 +77,8 @@ async function runBenchmark() {
     try {
       console.log(`Processing ${example.name}...`);
 
-      const jsonContent = fs
-        .readFileSync(example.jsonPath, "utf8")
-        .split("\n")[0]; // Take first line for simplicity
-      const tsonContent = fs
-        .readFileSync(example.tsonPath, "utf8")
-        .split("\n")[0]; // Take first line for simplicity
+      const jsonContent = example.json;
+      const tsonContent = example.tson;
 
       if (!jsonContent || !tsonContent) {
         console.log(`Skipping ${example.name} - empty content`);
@@ -93,26 +88,22 @@ async function runBenchmark() {
       // 1. Test STRING → OBJECT (parsing)
       // Test string → JSON Object
       const jsonParseResult = timeExecution(() => {
-        nativeJSON.parse(jsonContent);
+        example.json.split("\n").map((obj) => JSON.parse(obj));
       }, ITERATIONS);
 
       // Test string → TSON Object
       const tsonParseResult = timeExecution(() => {
-        parse(tsonContent);
+        example.tson.split("\n").map((obj) => TSON.parse(obj));
       }, ITERATIONS);
-
-      // 2. Test OBJECT → STRING (stringifying)
-      const jsonObj = nativeJSON.parse(jsonContent);
-      const tsonObj = parse(tsonContent);
 
       // Test JSON Object → string
       const jsonStringifyResult = timeExecution(() => {
-        nativeJSON.stringify(jsonObj);
+        example.objects.map((obj) => JSON.stringify(obj));
       }, ITERATIONS);
 
       // Test TSON Object → string
       const tsonStringifyResult = timeExecution(() => {
-        stringify(tsonObj);
+        example.objects.map((obj) => TSON.stringify(obj, false));
       }, ITERATIONS);
 
       // Store results

@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
-const { stringify, parse } = require("../packages/tson-js");
+const { stringify, parse } = require("../packages/tson-js").TSON;
 
 // Paths
 const examplesDir = path.join(__dirname, "examples");
