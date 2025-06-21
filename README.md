@@ -1,266 +1,221 @@
 # TSON (Token-Saving Object Notation)
 
+> ⚠️ **EXPERIMENTAL PROJECT** - This is a newly created project. Not ready for production use.
+
+## TL;DR
+
+**What**: A compact alternative to JSON/JSONL for LLM responses that reduces tokens by 15-30%  
+**Why**: Enables streaming of structured content generation without wrapper object overhead  
+**How**: Removes unnecessary JSON syntax overhead by using named root values instead of wrapper objects  
+**Use Case**: Complex multi-part content generation (documentation, educational materials, analysis results)
+
 ---
 
-## This is a newly created project. Not ready for production use.
+TSON is a compact, human-readable data format designed to reduce tokens in LLM API responses while maintaining readability and ease of parsing.
 
-TSON is a compact, human-readable data format designed for token-efficient, easy-to-parse data representation. Main reason to create this format is to reduce the number of tokens in the response of the LLM APIs. It is not recommend to use this format for data storage/exchange, but still it is suitable.
+## Use Case Scenario
 
-## Core Syntax
+### The Goal
 
-TSON uses a simple, concise syntax:
+Generate complex structured content (documentation, educational materials) with **streaming capability** in a single LLM call.
 
-- `name{prop1, prop2}` represents an object with name
-- `name[item1, item2]` represents an array with name
-- `name"value"` represents a string
-- `name=true|false` represents a boolean
-- `name#123` represents an integer
-- `name&123.45` represents a float/double
-- `name` represents a null value
-- `-` represents undefined
+### Problem #1: Structured Output Limitations
 
-## Object and Array Naming Rules
+**Issue**: Can't stream partial results - users must wait for the entire response to complete.
+**Attempted Solution**: Use partial JSON parsers.
+**Result**: Partial JSON parsing didn't solve the streaming problem effectively (at least for me).
 
-### Root Level Objects
+### Problem #2: JSONL Token Overhead
 
-- Root level objects can have names: `person{name"John", age#30}`
-  - If a name is provided, it indicates the object's type to the client and it will used for type inference
-  - If no name is provided `{name"John", age#30}`, it behaves like a standard JSON object
+**Issue**: Traditional JSONL requires wrapper structures for each content type.
 
-### Nested Objects
+**Standard JSONL** (type-payload structure) - **58 tokens**:
 
-- Objects inside other objects:
-  - Must have a name: `person{address{street"Main St", city"Anytown"}}`
-  - The name represents the field name in the parent object
-  - Objects without names inside other objects will cause an error
+```jsonl
+{"type": "metadata", "payload": {"difficulty": 3, "duration": 45}}
+{"type": "text", "payload": "<h1>Title</h1>"}
+{"type": "audio", "payload": "<voice>Content</voice>"}
+```
 
-### Objects in Arrays
+### Solution #1: Simplified JSONL Structure
 
-- Objects in arrays:
-  - Names are optional: `people[person{name"John"}, person{name"Jane"}]`
-  - If name is provided, it indicates the object's type to the client
-  - If no name is provided, it behaves like a standard JSON object
+**Approach**: Remove "type" and "payload" wrappers, use `{type: content}` directly.
 
-### Root Level Arrays
+**Optimized JSONL** - **40 tokens**:
 
-- Root level arrays can be named or unnamed:
-  - Named array: `colors["red", "green", "blue"]`
-  - Unnamed array: `["red", "green", "blue"]`
-  - Named arrays indicate the type of the array to the client
+```jsonl
+{"metadata": {"difficulty": 3, "duration": 45}}
+{"text": "<h1>Title</h1>"}
+{"audio": "<voice>Content</voice>"}
+```
 
-## JSON Conversion
+### Problem #3: Still Too Verbose
 
-When converting TSON to JSON, special handling is needed for named objects and arrays:
+**Issue**: Even optimized JSONL has unnecessary JSON syntax overhead.
+**Need**: Maximum token efficiency while maintaining type safety and streaming capability.
 
-### Named Object Conversion
+### Final Solution: TSONL
 
-If the object has a name and it is a root level object or an array item, it will be converted to `{name: object}` format in JSON:
+**Approach**: Named root values eliminate all wrapper overhead and remove all unnecessary JSON syntax overhead.
 
-- TSON: `person{name"John", age#30}`
-- JSON: `{person: {name: "John", age: 30}}`
+**TSONL** - **28 tokens** (15-30% reduction):
 
-- TSON: (in root) `arr[person{name"John", age#30}]`
-- JSON: `{arr: [{person: {name: "John", age: 30}}]}`
+```tsonl
+metadata{difficulty#3 duration#45}
+text'<h1>Title</h1>'
+audio'<voice>Content</voice>'
+```
 
-If the root object or array item has no name, it will be converted to a standard JSON object:
+## Why TSONL
 
-- TSON: `{name"John", age#30}`
-- JSON: `{"name": "John", "age": 30}`
+- **Progressive streaming**: Each line processes independently as it arrives
+- **15-30% fewer tokens**: No wrapper objects or redundant field names
+- **Type safety**: Named root values provide clear typing without overhead
+- **Easy parsing**: Simple line-by-line processing
+- **Clean separation**: Each content type is independently structured
 
-- TSON: (in root) `[person{name"John", age#30}]`
-- JSON: `[{"name": "John", "age": 30}]`
+Perfect for AI systems generating complex, multi-part structured content where both streaming capability and token efficiency are crucial.
 
-### Named Array Conversion
+## Quick Format Overview
 
-- Named arrays are also converted to `{name: array}` format:
-  - TSON: `colors["red", "green", "blue"]`
-  - JSON: `{colors: ["red", "green", "blue"]}`
+TSON uses simple, concise syntax with type prefixes and space separation:
 
-### Named Objects in Arrays
+- **Type prefixes**: `#123` (int), `=123.45` (float), `?true` (bool), `~` (null)
+- **Strings**: `"text"` or `'text'` (choose based on content to avoid escaping)
+- **Arrays**: `[#1 #2 "text"]` (space-separated)
+- **Objects**: `{name"John" age#30 active?true}` (space-separated)
 
-- Objects with names inside arrays follow the same pattern:
-  - TSON: `[person{name"John"}, person{name"Jane"}]`
-  - JSON: `[{"person": {"name": "John"}}, {"person": {"name": "Jane"}}]`
-
-## Strings
-
-TSON has specific string representation rules:
-
-- All strings are defined as: `name"John Doe"`
-- Strings with special characters will be properly escaped: `name"John, Doe"`
-- Special characters in strings are escaped with backslashes: `"\n"`, `"\t"`, `"\""`, etc.
-
-## Formatting
-
-- Data can be written in a single line: `user{name"John", age#30}`
-- Data can also be formatted across multiple lines for readability:
+**Example:** (34 tokens)
 
 ```tson
 user{
-  name"John",
+  name"John"
   age#30
-}
-```
-
-## Arrays
-
-```tson
-// Basic array
-colors["red", "green", "blue"]
-{colors: ["red", "green", "blue"]}
-
-// Unnamed root array
-["red", "green", "blue"]
-["red", "green", "blue"]
-
-// Arrays with direct value types
-[#1, #2, #3, #4, #5]  // Integers with # prefix
-[&1.1, &2.2, &3.3]    // Floats with & prefix
-[=true, =false]       // Booleans with = prefix
-
-// Type-specified arrays (provides hint for consumers but doesn't enforce type)
-numbers<#>[1, 2, 3, 4, 5]  // Integer array
-prices<&>[10.99, 5.99, 19.99]  // Float array
-flags<=>[true, false, true]  // Boolean array
-
-// Unnamed typed arrays
-<#>[1, 2, 3]  // Unnamed integer array
-<&>[1.1, 2.2]  // Unnamed float array
-<=>[true, false]  // Unnamed boolean array
-
-// Nested typed arrays
-[<#>[1, 2], <&>[3.3, 4.4]]  // Array containing typed arrays
-
-// Type specifier doesn't override explicit type markers
-mixed<#>[1, 2, &3.5]  // Contains integers 1, 2 and float 3.5
-
-// Array of objects
-users[
-  user{id#1, name"John"},
-  user{id#2, name"Jane"}
-]
-{users: [{user: {id: 1, name: "John"}}, {user: {id: 2, name: "Jane"}}]}
-
-// Array with unnamed objects
-users[
-  {id#1, name"John"},
-  {id#2, name"Jane"}
-]
-{users: [{id: 1, name: "John"}, {id: 2, name: "Jane"}]}
-```
-
-## Object Names
-
-- Object names must follow JavaScript variable naming conventions
-- Valid: `userName`, `user_name`, `user123`, `$user`
-- Invalid: `user-name`, `123user`
-- Object names cannot contain `@` character
-
-## Examples
-
-### Basic Example
-
-```tson
-user{
-  name"John Doe",
-  email"john.doe@example.com",
-  age#30,
-  isActive=true,
-  address{
-    street"123 Main St",
-    city"Anytown",
-    zipCode#12345
-  },
-  phoneNumbers[
-    "+1-555-123-4567",
-    "+1-555-987-6543"
+  friends[
+    name"Jane"
+    name"Bob"
   ]
+  active?true
 }
 ```
 
-### Root Level Unnamed Object
+**Equivalent JSON:** (50 tokens)
 
-```tson
+```json
 {
-  firstName"John",
-  lastName"Doe",
-  age#30
+  "user": {
+    "name": "John",
+    "age": 30,
+    "friends": [{ "name": "Jane" }, { "name": "Bob" }],
+    "active": true
+  }
 }
 ```
 
-### Root Level Array Examples
+### TSONL (TSON Lines)
 
-```tson
-// Named root array
-colors["red", "green", "blue"]
+Like JSONL, TSONL processes one TSON value per line, perfect for:
 
-// Unnamed root array
-[1, 2, 3, 4, 5]
+- Streaming data processing
+- Batch operations
+- Log file formats
 
-// Root array with mixed object types
-[
-  user{name"John", age#30},
-  {name"Anonymous", type"guest"},
-  product{id#123, price&99.99}
-]
+```tsonl
+user{name"John" age#30}
+user{name"Jane" age#25}
+user{name"Bob" age#35}
 ```
 
-### Complex Example
+**Equivalent JSONL:**
 
-```tson
-order{
-  id"ORD-12345",
-  customer{
-    id"CUST-789",
-    name"John Doe",
-    email"john@example.com"
-  },
-  orderDate"2023-06-15T10:30:00Z",
-  status"shipped",
-  items[
-    {
-      id"ITEM-001",
-      name"Wireless Headphones",
-      quantity#1,
-      price&99.99,
-      notes"These are noise-cancelling headphones"
-    },
-    {
-      id"ITEM-002",
-      name"Phone Case",
-      quantity#2,
-      price&19.99
-    },
-    {
-      id"ITEM-003",
-      name"USB-C Cable",
-      quantity#3,
-      price&9.99,
-      notes
-    }
-  ],
-  shippingAddress{
-    street"123 Main St",
-    city"Anytown",
-    state"CA",
-    zipCode#12345
-  },
-  notes"This is a gift order. Please wrap items separately and include gift message."
-}
+```jsonl
+{"user": {"name": "John", "age": 30}}
+{"user": {"name": "Jane", "age": 25}}
+{"user": {"name": "Bob", "age": 35}}
 ```
 
-## Type Specifiers
+### Token Efficiency
 
-TSON supports explicit type specifiers for values:
+TSON typically reduces token count by 15-30% compared to equivalent JSON:
 
-- `#` for integers: `age#42`
-- `?` for booleans: `enabled?true`
-- `=` for floating-point numbers: `price=99.99`
+- Eliminates colons, commas, and excessive quotes
+- Shorter type indicators
+- Space-based separation
+- Smart quote selection reduces escaping
 
-These specifiers can also be used with arrays to indicate the element type:
+## Documentation
+
+📖 **For complete documentation, examples, and detailed syntax rules, see [TSON.md](docs/TSON.md)**
+
+## Using TSON with LLMs
+
+To use TSON in your LLM prompts, include the instructions from [TSON_LLM_instructions.md](docs/TSON_LLM_instructions.md) in your system prompt or user prompt. This file contains concise instructions that teach the LLM how to format responses in TSON.
+
+Example prompt addition:
 
 ```
-<#>[1, 2, 3]        // Integer array
-<?>[true, false]    // Boolean array
-<=>["1.5", "2.5"]   // Float/string array (type specifier is just a hint)
+Please format your response using TSON syntax as described in the attached instructions.
 ```
+
+## Implementation Packages
+
+Implementation packages are available in the [`/packages`](packages/) directory:
+
+- **[tson-js](packages/tson-js/)** - JavaScript/TypeScript implementation. Completed for testing purposes.
+- **[tson-rust](packages/tson-rust/)** - Rust implementation. Started, not implemented yet.
+- **[tson-dart](packages/tson-dart/)** - Dart implementation. Started, not implemented yet.
+
+Each package will include:
+
+- Parser and serializer
+- Type definitions
+- Test suites
+- Usage examples
+
+## Tools
+
+- [tson-vscode](extensions/tson-vscode/) - VSCode extension for TSON and TSONL.
+- [tson-jetbrains](extensions/tson-jetbrains/) - JetBrains plugin for TSON and TSONL. (Not created yet)
+
+## Contributing
+
+This is an experimental format. Contributions, feedback, and suggestions are welcome! Please check the individual package directories for specific implementation details and contribution guidelines.
+
+## Contributors
+
+Thanks to all the contributors who have helped make TSON better:
+
+<table>
+<tr>
+    <td align="center">
+        <a href="https://github.com/Mehmetyaz">
+            <img src="https://github.com/Mehmetyaz.png" width="80" style="border-radius:50%"/>
+            <br />
+            <sub><b>Mehmet Yaz</b></sub>
+        </a>
+        <br />
+        <sub>Creator & Maintainer</sub>
+    </td>
+</tr>
+</table>
+
+Want to contribute? Check out our [contributing guidelines](CONTRIBUTING.md) and feel free to submit issues, feature requests, or pull requests!
+
+## What's Next
+
+- [ ] Complete JavaScript implementation (tson-js)
+- [ ] Complete Dart implementation (tson-dart)
+- [ ] Add Python implementation (tson-python)
+- [ ] Implement stream parser for LLM delta streams (for all implementations)
+- [ ] Complete Rust implementation with WASM compilation (tson-rust)
+- [ ] Add more comprehensive tests (for all implementations)
+- [ ] Complete VSCode extension (tson-vscode)
+- [ ] Create JetBrains plugin (tson-jetbrains)
+- [ ] Performance improvements
+- [ ] Add more examples and use cases
+- [ ] Submit RFC proposal for TSON and TSONL standardization
+- [ ] Contact relevant companies to ensure LLM models recognize TSON and TSONL by default
+
+## License
+
+See [LICENSE](LICENSE) file for details.
