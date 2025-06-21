@@ -143,9 +143,27 @@ TSON typically reduces token count by 15-30% compared to equivalent JSON:
 - Space-based separation
 - Smart quote selection reduces escaping
 
+## Performance
+
+**Theory vs Practice**: Theoretically, TSON should parse faster than JSON since each value's type is known upfront, eliminating type detection overhead. However, in practice, we haven't achieved this theoretical speed advantage.
+
+**JSON's Optimization Legacy**: JSON parsers have been heavily optimized over decades, making them extremely efficient. Our current TSON implementation hasn't reached that level of optimization yet.
+
+**Priority Statement**: Performance was not the primary goal of TSON. The main objectives are:
+
+- **Token reduction** (15-30% fewer tokens for LLM efficiency)
+- **Streaming capability** (progressive parsing for real-time applications)
+- **Readability** (human-friendly format)
+
+**Current Status**: No comprehensive performance optimization or code quality review has been conducted yet. The current implementations prioritize correctness and feature completeness over speed.
+
+**Future Work**: Performance improvements and code quality enhancements are planned for future releases once the format stabilizes and core functionality is complete across all target languages.
+
 ## Documentation
 
 📖 **For complete documentation, examples, and detailed syntax rules, see [TSON.md](docs/TSON.md)**
+
+🎯 **For real-world use cases and practical examples, see [Real-World Scenarios](docs/scenarios.md)**
 
 ## Using TSON with LLMs
 
@@ -156,6 +174,54 @@ Example prompt addition:
 ```
 Please format your response using TSON syntax as described in the attached instructions.
 ```
+
+## TSON Real-World Scenarios
+
+This document demonstrates practical use cases where TSON provides significant advantages over traditional JSON/JSONL formats, particularly in streaming applications and token-sensitive environments.
+
+### Scenarios
+
+Each scenario compares three approaches:
+
+1. **Structured Output** - Traditional single JSON response
+2. **JSONL with {field: value}** - Streaming with wrapper objects
+3. **TSONL** - Streaming with named root values
+
+#### [Multi-Part Content Generation](docs/scenario-content-generation.md)
+
+AI system generating educational content with multiple content types (text, pictures, audio, metadata).
+
+##### Comparison
+
+| Approach             | Tokens | Streaming |
+| -------------------- | ------ | --------- |
+| Structured Output    | 121    | ❌ No     |
+| JSONL {field: value} | 131    | ✅ Yes    |
+| TSONL                | 77     | ✅ Yes    |
+
+#### [Streaming Translation Service](docs/scenario-streaming-translation.md)
+
+Large document translation with progressive delivery to users.
+
+##### Comparison
+
+| Approach             | Tokens | Streaming |
+| -------------------- | ------ | --------- |
+| Structured Output    | 77     | ❌ No     |
+| JSONL {field: value} | 108    | ✅ Yes    |
+| TSONL                | 54     | ✅ Yes    |
+
+#### [Dictionary Entry Generation](docs/scenario-dictionary-entry.md)
+
+Creating structured dictionary entries with metadata, explanations, and examples.
+
+##### Comparison
+
+| Approach              | Tokens | Streaming |
+| --------------------- | ------ | --------- |
+| Structured Output     | 99     | ❌ No     |
+| JSONL {type: payload} | 110    | ✅ Yes    |
+| TSONL                 | 66     | ✅ Yes    |
 
 ## Implementation Packages
 
@@ -179,7 +245,7 @@ Each complete package includes:
 
 ## Tools
 
-- **[tson-vscode](extensions/tson-vscode/)** - VSCode extension for TSON and TSONL ✅ **Available**
+- **[tson-vscode](extensions/tson-vscode/)** - VSCode extension for TSON and TSONL ✅ **Developing - Not Published Yet**
   - Syntax highlighting
   - Language support
   - File icons
@@ -187,7 +253,52 @@ Each complete package includes:
 
 ## Contributing
 
-This is an experimental format. Contributions, feedback, and suggestions are welcome! Please check the individual package directories for specific implementation details and contribution guidelines.
+This is an experimental format and **contributions are needed in almost every area!** We welcome:
+
+### 🌍 **Language Implementations**
+
+Beyond our current JavaScript, Rust, and Dart implementations:
+
+- **Python** (next on the list)
+- **Go**, **Ruby**, **PHP**, etc.
+- Any language you're passionate about! Especially languages that are used in backend.
+
+### ⚙️ **Parser & Serializer Enhancements**
+
+- **Parse options**: Validation modes, streaming parsers
+- **Stringify options**: Formatting styles, compression
+- **Performance optimizations**: Faster parsing algorithms, memory efficiency
+- **Error handling**: Better error messages, recovery mechanisms
+
+### 🎨 **Syntax & Format Evolution**
+
+- **Syntax improvements**: More intuitive operators, cleaner edge cases
+- **Compatibility modes**: JSON fallback, migration tools
+
+### 🛠 **Tools & Extensions**
+
+- **IDE Plugins**: IntelliJ, Sublime, Atom, Vim, Emacs
+- **Command-line tools**: Validators, converters, formatters, linters
+- **Online tools**: Interactive playground, converter websites
+
+### 📚 **Documentation & Examples**
+
+- **Real-world use cases**: API responses, config formats, data exchange
+- **Educational content**: Tutorials, best practices, migration guides
+- **Language-specific guides**: Integration examples for each platform
+
+### 🧪 **Testing & Quality**
+
+- **Comprehensive test suites**: Edge cases, performance benchmarks
+- **Fuzzing**: Random input testing, stress testing
+- **Cross-platform compatibility**: Ensure consistency across implementations
+
+### 🚀 **Advanced Features**
+
+- **Streaming parsers**: For LLM delta streams, large datasets
+- **WASM compilation**: Browser-ready high-performance parsers
+
+**See our [contributing guidelines](CONTRIBUTING.md) for detailed information on how to get started!**
 
 ## Contributors
 
