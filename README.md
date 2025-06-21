@@ -213,7 +213,7 @@ Want to contribute? Check out our [contributing guidelines](CONTRIBUTING.md) and
 
 If you find TSON useful, you can support the project:
 
-<a href="https://www.buymeacoffee.com/gbraad" target="_blank"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a computer part&emoji=🔩&slug=mehmetyaz&button_colour=40DCA5&font_colour=ffffff&font_family=Inter& outline_colour=000000&coffee_colour=FFDD00" alt="Buy Me A Coffee"></a>
+<a href="https://www.buymeacoffee.com/mehmetyaz" target="_blank"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a computer part&emoji=🔩&slug=mehmetyaz&button_colour=40DCA5&font_colour=ffffff&font_family=Inter& outline_colour=000000&coffee_colour=FFDD00" alt="Buy Me A Coffee"></a>
 
 ## What's Next
 
