@@ -231,7 +231,7 @@ Implementation packages are available in the [`/packages`](packages/) directory:
   - Full parser and serializer
   - TypeScript definitions
   - Comprehensive test suite
-  - Production ready
+  - Ready to test
 - **[tson-rust](packages/tson-rust/)** - Rust implementation 🚧 **In Progress**
 - **[tson-dart](packages/tson-dart/)** - Dart implementation 🚧 **In Progress**
 
