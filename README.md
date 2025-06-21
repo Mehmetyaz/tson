@@ -161,21 +161,29 @@ Please format your response using TSON syntax as described in the attached instr
 
 Implementation packages are available in the [`/packages`](packages/) directory:
 
-- **[tson-js](packages/tson-js/)** - JavaScript/TypeScript implementation. Completed for testing purposes.
-- **[tson-rust](packages/tson-rust/)** - Rust implementation. Started, not implemented yet.
-- **[tson-dart](packages/tson-dart/)** - Dart implementation. Started, not implemented yet.
+- **[tson-js](packages/tson-js/)** - JavaScript/TypeScript implementation ✅ **Complete**
+  - Full parser and serializer
+  - TypeScript definitions
+  - Comprehensive test suite
+  - Production ready
+- **[tson-rust](packages/tson-rust/)** - Rust implementation 🚧 **In Progress**
+- **[tson-dart](packages/tson-dart/)** - Dart implementation 🚧 **In Progress**
 
-Each package will include:
+Each complete package includes:
 
 - Parser and serializer
 - Type definitions
 - Test suites
 - Usage examples
+- Documentation
 
 ## Tools
 
-- [tson-vscode](extensions/tson-vscode/) - VSCode extension for TSON and TSONL.
-- [tson-jetbrains](extensions/tson-jetbrains/) - JetBrains plugin for TSON and TSONL. (Not created yet)
+- **[tson-vscode](extensions/tson-vscode/)** - VSCode extension for TSON and TSONL ✅ **Available**
+  - Syntax highlighting
+  - Language support
+  - File icons
+- **tson-jetbrains** - JetBrains plugin for TSON and TSONL 📋 **Planned**
 
 ## Contributing
 
@@ -200,6 +208,12 @@ Thanks to all the contributors who have helped make TSON better:
 </table>
 
 Want to contribute? Check out our [contributing guidelines](CONTRIBUTING.md) and feel free to submit issues, feature requests, or pull requests!
+
+## Support
+
+If you find TSON useful, you can support the project:
+
+<a href="https://www.buymeacoffee.com/mehmetyaz"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a computer part&emoji=🔩&slug=mehmetyaz&button_colour=40DCA5&font_colour=ffffff&font_family=Inter&outline_colour=000000&coffee_colour=FFDD00" /></a>
 
 ## What's Next
 
