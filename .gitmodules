@@ -7,3 +7,6 @@
 [submodule "packages/tson-dart"]
 	path = packages/tson-dart
 	url = https://github.com/Mehmetyaz/tson-dart.git
+[submodule "packages/tson-rust"]
+	path = packages/tson-rust
+	url = https://github.com/Mehmetyaz/tson-rust.git
